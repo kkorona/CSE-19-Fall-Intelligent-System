@@ -1,3 +1,9 @@
+/*
+ * Perceptron Learning을 위한 코드
+ * Target program : learning.exe
+ */
+
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -6,6 +12,7 @@ using namespace std;
 const int N = 7;
 const int M = 5;
 
+// input data의 형식을 정의
 const int input[10][N*M] = {
     {0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0},
     {0, 1, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 1, 0},
@@ -19,18 +26,22 @@ const int input[10][N*M] = {
     {0, 1, 1, 1, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1, 1, 1, 0}
 };
 
+// 갱신 여부를 체크하기 위한 배열
 bool validation[10];
 
+// Perceptron 구조 정의 (threshold는 0으로)
 struct Perceptron {
     int weight[N*M];
 } perceptron[10];
 
+// step function 정의
 int step_function(int u) {
     return (u>=0) ? 1:-1;
 }
 
 // Actual Functions
 
+// 개별 Perceptron weight 초기화
 void init_perceptron(int index) {
         
     for(int i=0; i<N; i++) {
@@ -40,6 +51,7 @@ void init_perceptron(int index) {
     }
 }
 
+// 모든 Perceptron weight 초기화
 void init_perceptrons() {
     for(int index = 0; index<=9; index++) {
         init_perceptron(index);
@@ -47,6 +59,7 @@ void init_perceptrons() {
     }
 }
 
+// Actual output을 계산하기 위한 행렬 연산
 int calculate(const int *A, const int *B) {
     int arr_size = N*M;
     int result = 0;
@@ -57,6 +70,7 @@ int calculate(const int *A, const int *B) {
     return step_function(result);
 }
 
+// 개별 Perceptron의 weight 갱신 함수
 void update_perceptron(int index) {
     int new_value[N*M];
     int y[10];
@@ -87,6 +101,7 @@ void update_perceptron(int index) {
     }
 }
 
+// 갱신이 필요한 perceptron의 weight 갱신 함수
 void update_perceptrons() {
     for(int i=0; i<=9; i++) {
         if(!validation[i]) {
@@ -95,6 +110,7 @@ void update_perceptrons() {
     }
 }
 
+// 모든 perceptron중 weight 갱신이 필요한 perceptron의 flag를 켜는 함수
 bool is_validate_perceptrons() {
     bool is_validate = true;
     for(int i=0; i<=9; i++) {
@@ -115,6 +131,7 @@ bool is_validate_perceptrons() {
     return is_validate;
 }
 
+// 모든 perceptron의 현재 weight를 출력하는 함수
 void dump_perceptrons() {
     for(int i=0; i<=9; i++) {
         printf("Perceptron of %d: [",i);
@@ -146,6 +163,7 @@ int main() {
     dump_perceptrons();
     
     
+    // 각각의 파일에 validation이 완료된 perceptron의 최종 weight를 출력
     for(int i=0; i<=9; i++) {
         char filename[20];
         sprintf(filename,"perceptron-%d.txt",i);
